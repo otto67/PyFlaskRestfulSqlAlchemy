@@ -50,6 +50,9 @@ class ListUsers(Resource):
 
 class EditTasks(Resource):
     
+    def get(self):
+        return get_noncomplete_tasks()
+
     def put(self):
         json_data = request.get_json(force=True)
         id = json_data['id']
@@ -342,6 +345,18 @@ def get_all_tasks():
     else:
         for task in all_tasks:
             msg.append([task.id, task.desc, task.complete, task.user_id])
+
+    return jsonify(msg)
+
+def get_noncomplete_tasks(): 
+    noncompleted_tasks = Task.query.filter_by(complete=False).all()
+    
+    if not noncompleted_tasks:
+        return jsonify(["No data"])  
+    
+    msg = []
+    for task in noncompleted_tasks:
+        msg.append([task.id, task.desc, task.user_id])
 
     return jsonify(msg)
 

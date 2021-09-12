@@ -44,6 +44,25 @@ function listTask(data){
     document.getElementById('query_response').innerHTML = tmp;
  }
 
+ function listNonCompleteTasks(data){
+   var tmp = '<h3> Non-completed tasks </h3> <br> '
+
+   if (data.length == 1 && data[0] == "none"){
+     document.getElementById('query_response').innerHTML = "No non-completed tasks in database"
+     return
+ }
+
+  console.log("List non-completed tasks, found " + data.length.toString() + " task(s)")
+
+  for(let i=0; i < data.length; i++){
+     let tmp2 = data[i].toString().split(',');
+     for(let j=0; j<tmp2.length;j++) 
+         tmp += tmp2[j] + '<pre></pre>'; 
+     tmp += '<br>'; 
+ }
+  document.getElementById('query_response').innerHTML = tmp;
+}
+
     
 function listTasks(){
     
@@ -60,8 +79,16 @@ function listTasks(){
 } 
 
 function listNonCompletedTasks(){
-    console.log("Listing non-completed tasks")
-    document.getElementById('query_response').innerHTML = "Here comes a list of uncompleted tasks";
+  fetch('/task', {
+    method: 'GET', 
+    headers: {
+      'Content-Type': 'application/json'
+    } 
+  })
+  .then(data => data.json())
+  .then(data => listNonCompleteTasks(data))
+  .catch(err => console.log('Non-complete Task  ' + err))
+
 }
 
 function CompleteTask(){
