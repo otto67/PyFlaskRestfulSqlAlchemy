@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="{{url_for('static', filename='userdb.js') }}" async></script>
+        <script src="{{url_for('static', filename='taskdb.js') }}" async></script>
+      </head>
+<body>
+
+
+<div class="upper">
+    <p>Database query with authentication</p>
+    <img src="{{ url_for('static', filename='mypict2.jpg') }}" align="middle" />
+
+    <h3>Query target </h3>
+    <label style=color:blue;background-color:red> Target: </label>
+        <select name="target" id="target" onchange="updateTarget()">
+            <option value="user">User database</option>
+            <option value="task">Task list</option>
+        </select>
+
+    <div id="Login">
+        <h3>Login section</h3> 
+        {% if input_data %}
+        {% set items=input_data.split(' ') %}
+        {%for value in items%} 
+
+        {{value}}
+
+        <br>
+        {% endfor %}
+        <br> 
+        {% endif %}
+
+        <label> Username: </label>
+        <input type="text" value="None" id="username">
+        <BR/><BR/>
+        <label> Password: </label>
+        <input type="text" value="None" id="password">
+        <BR/><BR/>
+
+    </div>
+
+     <div id="response">
+         <h3 style="text-align: center;">Server response </h3> 
+        <div id="query_response"> No response yet </div>
+    </div>
+
+    <div class="middle">
+        <p>Database interface</p>
+        <div class = lower>
+            <p>Query user database</p>
+            <button type="button" onclick="restfulGetUser()">List user(s)</button>
+            <button type="button" onclick="restfulPostUser()">Add user</button>
+            <button type="button" class="mybutton" onclick="restfulDeleteUser()">Delete user(s)</button>
+            <button type="button" class="mybutton" onclick="restfulPutUser()">Toggle admin status</button>
+            <br> <br>
+            <label> User ID: </label>
+            <input type="text" value="0" id="user_id">
+            <label> User data: </label>
+            <input type="text" size=60 value="Format: name, password, admin_status" id="user_data">
+
+        </div> 
+
+        <div class="lower">
+            <p>Query task database</p>
+            <button type="button" onclick="listTasks()">List task(s)</button>
+            <button type="button" onclick="listNonCompletedTasks()">List non-completed tasks </button>
+            <button type="button" class="mybutton" onclick="addTask()">Add task</button>
+            <button type="button" class="mybutton" onclick="deleteTask()">Delete task</button>
+            <button type="button" onclick="CompleteTask()">Complete task </button> <br> <br>
+            <label> Task number: </label>
+            <input type="text" value="0" id="task_number">
+            <label> Task data: </label>
+            <input type="text" size=60 value="Format: description, completed_status, user_id" id="task_data">
+
+        </div>
+</div>
+    
+</div>
+
+
+</body>
+</html>

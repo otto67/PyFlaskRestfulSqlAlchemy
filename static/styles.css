@@ -1,0 +1,85 @@
+p {
+    color:black; 
+}
+
+h1 {
+    color: red;
+}
+
+body {
+    color: beige;
+    background-color: #0000ff;
+    font-size: 16px;
+}
+
+button {
+    background-color: red; 
+    border: none;
+    border-radius: 50%;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+  label {
+    background-color: lightblue; 
+    font-size: 20px;
+  }
+
+.mybutton {
+    background-color: blue; 
+    border: 5px;
+    border-radius: 50%;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.upper {
+    background-color: rgb(0, 204, 255);
+    font-size: 30px;
+    text-align: center;
+    border: 10px solid powderblue;
+    margin: 20px;
+}
+
+.middle {
+    background-color: green;
+    font-size: 24px;
+    border: 5px solid red;
+    margin: 50px;
+}
+
+.lower {
+    font-size: 18px;
+    color: red;
+    border: 2px solid red;
+    background-color: yellowgreen;
+    margin: 50px;
+    padding: 40px;
+    text-align: left;
+}
+
+#Login {
+    font-size: 18px;
+    color: black;
+    border: 2px solid red;
+    background-color: yellowgreen;
+    margin: 50px;
+    padding: 40px;
+    text-align: left;
+}
+
+#response {
+    font-size: 18px;
+    color: black;
+    border: 2px solid red;
+    background-color: yellowgreen;
+    margin: 50px;
+    padding: 0px;
+    text-align: left;
+}
