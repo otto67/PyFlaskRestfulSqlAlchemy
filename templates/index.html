@@ -19,27 +19,24 @@
             <option value="task">Task list</option>
         </select>
 
-    <div id="Login">
-        <h3>Login section</h3> 
-        {% if input_data %}
-        {% set items=input_data.split(' ') %}
-        {%for value in items%} 
+        <div id='Login'>
 
-        {{value}}
-
-        <br>
-        {% endfor %}
-        <br> 
-        {% endif %}
-
-        <label> Username: </label>
-        <input type="text" value="None" id="username">
-        <BR/><BR/>
-        <label> Password: </label>
-        <input type="text" value="None" id="password">
-        <BR/><BR/>
-
-    </div>
+            <a href="{{ url_for('my_app.userprofile') }}" class="navbar-item">
+                Profile
+            </a>
+            <br>
+            <a href="{{ url_for('my_auth.login') }}" class="navbar-item">
+                Login
+            </a>
+            <br>
+            <a href="{{ url_for('my_auth.signup') }}" class="navbar-item">
+                Sign Up
+            </a>
+            <br>
+            <a href="{{ url_for('my_auth.logout') }}" class="navbar-item">
+                Logout
+            </a>
+        </div>
 
      <div id="response">
          <h3 style="text-align: center;">Server response </h3> 

@@ -1,28 +1,26 @@
-from flask import Flask, jsonify, render_template, Response, request
+from flask import Flask, jsonify, render_template, Response, request, Blueprint
 from flask_sqlalchemy import SQLAlchemy
-import os, sqlite3, secrets, string, random
+import sqlite3, secrets, string, random
 from flask_restful import Resource, Api
+from . import db
+from .models import Task, User
+from flask_login import login_required, current_user
 
-app=Flask(__name__)
-app.config['SECRET_KEY'] = 'mysecret'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+my_app = Blueprint('my_app', __name__)
 
-api = Api(app)
-
-# Use as decorator when authorization is added
-def login_required(func):
-    def inner(*args, **kwargs):
-        print("Login is required")
-        return func(*args, **kwargs)
-    return inner
+api = Api(my_app)
 
 class Index(Resource):
     def get(self):
         return Response(response=render_template('index.html'))       
 
+# API for adding, modifying, deleting users
 class EditUsers(Resource):
-    
+    method_decorators = {
+        'post': [login_required],
+        'delete':[login_required]
+        }
+
     def put(self):
         json_data = request.get_json(force=True)
         id = json_data['id']
@@ -41,6 +39,7 @@ class EditUsers(Resource):
         else:
             return delete_user(id)
 
+# API for listing users
 class ListUsers(Resource):
     def get(self, id):
         if (id == 'all'):
@@ -48,6 +47,7 @@ class ListUsers(Resource):
         else: 
             return get_user(id) 
 
+# API for manipulating tasks and listing non-completed tasks 
 class EditTasks(Resource):
     
     def get(self):
@@ -75,6 +75,7 @@ class EditTasks(Resource):
         else:
             return delete_task(id)
 
+# Class for listing tasks
 class ListTasks(Resource):
     def get(self, id):
         if (id == 'all'):
@@ -82,26 +83,18 @@ class ListTasks(Resource):
         else: 
             return get_task(id) 
 
+# API for user profile
+class UserProfile(Resource):
+    method_decorators = {'get': [login_required]}
+    def get(self, *args, **kwargs):
+        return Response(response=render_template('profile.html')) 
+
 api.add_resource(Index, '/')
 api.add_resource(EditUsers, '/user')
 api.add_resource(EditTasks, '/task')
 api.add_resource(ListUsers, '/listuser/<id>')
 api.add_resource(ListTasks, '/listtask/<id>')
-
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    public_id = db.Column(db.String(50), unique=True)
-    name = db.Column(db.String(50))
-    password = db.Column(db.String(50))
-    admin = db.Column(db.Boolean)
-
-class Task(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    desc = db.Column(db.String(50))
-    complete = db.Column(db.Boolean)
-    user_id = db.Column(db.Integer)
+api.add_resource(UserProfile, '/profile')
 
 def create_tables():
     conn = sqlite3.connect('app.db')
@@ -115,7 +108,7 @@ def create_tables():
     conn.commit()
     c.execute("""CREATE TABLE IF NOT EXISTS user (
         id integer PRIMARY KEY,
-        public_id text NOT NULL,
+        email text NOT NULL,
         name text NOT NULL,
         password text NOT NULL,
         admin boolean
@@ -138,7 +131,7 @@ def add_user(id):
         return jsonify({'message' : msg})
 
     # Just randomize the fields of the database for now
-    public_id = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
+    email = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
                                                   for i in range(3))
 
     name = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
@@ -149,7 +142,7 @@ def add_user(id):
 
     adm = bool(random.getrandbits(1))
 
-    user = User(id=id, public_id=public_id, name=name, password=password, admin=adm)
+    user = User(id=id, email=email, name=name, password=password, admin=adm)
 
     db.session.add(user)
     db.session.commit()
@@ -217,7 +210,7 @@ def get_user(id):
         tmp2 = str(-tmp)
         msg.append([tmp2, 0, "none", "none", False])
     else:
-        msg.append([user.id, user.public_id, user.name, user.password, user.admin])
+        msg.append([user.id, user.email, user.name, user.admin])
 
     return jsonify(msg)
 
@@ -229,7 +222,7 @@ def get_all_users():
         msg.append(["none"])
     else:
         for user in all_users:
-            msg.append([user.id, user.public_id, user.name, user.password, user.admin])
+            msg.append([user.id, user.email, user.name, user.admin])
 
     return jsonify(msg)
 
@@ -359,6 +352,3 @@ def get_noncomplete_tasks():
         msg.append([task.id, task.desc, task.user_id])
 
     return jsonify(msg)
-
-if __name__ == '__main__':
-    app.run(debug=True)
