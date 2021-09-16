@@ -51,22 +51,9 @@ function getUserID(){
     return mymap;
 }
 
-// Add user
-function restfulPostUser(){
-    fetch('/user', {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(getUserData()) 
-        })
-        .then(data => data.json())
-        .then(data => document.getElementById('query_response').innerHTML = data.message)
-        .catch(err => console.log('Restful post ' + err))
-}
 
-// List user(s)
-function restfulGetUser(){
+// Get user(s)
+function getUser(){
     var url = '/listuser/' + document.getElementById("user_id").value
     fetch(url, {
           method: 'GET', 
@@ -77,31 +64,4 @@ function restfulGetUser(){
         .then(data => data.json())
         .then(data => listUser(data))
         .catch(err => console.log('Restful get ' + err))
-}
-// Delete user(s)
-function restfulDeleteUser(){ 
-    fetch('/user', {
-        method: 'DELETE', 
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(getUserID())  
-      })
-      .then(data => data.json())
-      .then(data => document.getElementById('query_response').innerHTML = data.message)
-      .catch(err => console.log('Restful delete ' + err))
-}
-
-// Modify admin bit of specified user
-function restfulPutUser(){
-    fetch('/user', {
-        method: 'PUT', 
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(getUserID()) 
-      })
-      .then(data => data.json())
-      .then(data => document.getElementById('query_response').innerHTML = data.message)
-      .catch(err => console.log('Restful put ' + err))
 }

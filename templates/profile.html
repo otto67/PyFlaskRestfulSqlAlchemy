@@ -9,10 +9,40 @@
 
 
     <div id="Login">
-       Hello {{ user_data }}
+       Hello, {{ user_data }}
+       <br>
+       <br>
+       
+
+    <div>
+      <a href="{{ url_for('my_auth.logout') }}" class="navbar-item">
+        Logout
+    </a>
+    <br>
+    <a href="{{ url_for('my_app.index') }}" class="navbar-item">
+        Home
+    </a>
+
+    {% if current_user.admin %}
+
+    <br>
+    <a href="{{ url_for('my_app.editusers') }}" class="navbar-item">
+        Administrate users
+    </a>
     </div>
 
-</h3>
+    {% endif %}
+
+    
+</div>
+ 
+<div id="Login">
+    Here comes stuff a logged-in non-administrator user is allowed do
+    <br>
+    <br>
+    
+
+</div>
 
 </body>
 </html>

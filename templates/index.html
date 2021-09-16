@@ -19,8 +19,22 @@
             <option value="task">Task list</option>
         </select>
 
-        <div id='Login'>
+        <h3>{% if current_user.is_authenticated %}
+            Current user is {{current_user.name}}
+            {% else %}
+            User not logged in 
+             {% endif %}</h3>
 
+        <div id='Login'>
+            <h3> 
+                {%  set message = get_flashed_messages() %}
+                {% if message %}
+                <div>
+                    {{ message[0] }}
+                </div>
+
+                {% endif %}
+            </h3>
             <a href="{{ url_for('my_app.userprofile') }}" class="navbar-item">
                 Profile
             </a>
@@ -47,32 +61,35 @@
         <p>Database interface</p>
         <div class = lower>
             <p>Query user database</p>
-            <button type="button" onclick="restfulGetUser()">List user(s)</button>
-            <button type="button" onclick="restfulPostUser()">Add user</button>
-            <button type="button" class="mybutton" onclick="restfulDeleteUser()">Delete user(s)</button>
-            <button type="button" class="mybutton" onclick="restfulPutUser()">Toggle admin status</button>
-            <br> <br>
+            <button type="button" onclick="getUser()">List user(s)</button>
+            <br><br>
             <label> User ID: </label>
-            <input type="text" value="0" id="user_id">
-            <label> User data: </label>
-            <input type="text" size=60 value="Format: name, password, admin_status" id="user_data">
-
+            <input type="text" value="all" id="user_id">
+            
         </div> 
 
+
         <div class="lower">
+            {% if current_user.is_authenticated %}
             <p>Query task database</p>
             <button type="button" onclick="listTasks()">List task(s)</button>
             <button type="button" onclick="listNonCompletedTasks()">List non-completed tasks </button>
             <button type="button" class="mybutton" onclick="addTask()">Add task</button>
             <button type="button" class="mybutton" onclick="deleteTask()">Delete task</button>
             <button type="button" onclick="CompleteTask()">Complete task </button> <br> <br>
+            <br><br>
             <label> Task number: </label>
             <input type="text" value="0" id="task_number">
             <label> Task data: </label>
             <input type="text" size=60 value="Format: description, completed_status, user_id" id="task_data">
 
+            {% else %}
+             <h3>Sign up or log in to see task database</h3>
+             {% endif %}
         </div>
-</div>
+
+
+    </div>
     
 </div>
 

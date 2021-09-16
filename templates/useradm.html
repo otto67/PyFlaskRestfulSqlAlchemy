@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="{{url_for('static', filename='userdb.js') }}" async></script>
+        <script src="{{url_for('static', filename='admfuncs.js') }}" async></script>
+      </head>
+<body>
+    
+       <h3> 
+        {%  set message = get_flashed_messages() %}
+        {% if message %}
+        <div>
+            {{ message[0] }}
+        </div>
+
+        {% endif %}
+        </h3>
+
+        <div id="response">
+            <h3 style="text-align: left;">Server response </h3> 
+           <div id="query_response"> No response yet </div>
+       </div>
+   
+
+    <div id=Login>
+        <p style="text-align: center;">
+        Current user is {{ current_user.name }}
+        {% if current_user.admin %} (Adminstrator)
+        {%endif %}
+    </p>
+        <br>
+        <h3 class="title" style="text-align: left;">Administrate users</h3>
+        <br>
+        <button type="button" class="mybutton" onclick="deleteUser()">Delete user(s)</button>
+        <button type="button" class="mybutton" onclick="toggleAdmStatus()">Toggle admin status</button>
+        <button type="button" onclick="getAllUsers()">List all users</button>
+        <br><br><br>
+        <label> User ID: </label>
+        <input type="text" value="0" id="admpage_userid">
+        <br><br><br>
+
+    <div>
+      <a href="{{ url_for('my_auth.logout') }}" class="navbar-item">
+        Logout
+    </a>
+    <br>
+    <a href="{{ url_for('my_app.index') }}" class="navbar-item">
+        Home
+    </a>
+
+    <br>
+    <a href="{{ url_for('my_app.userprofile') }}" class="navbar-item">
+        Profile page
+    </a>
+    </div>
+</div>
+
+
+
+</div>
+</body>
+</html>

@@ -26,8 +26,8 @@ def login():
 
         # if the above check passes, then we know the user has the right credentials
         login_user(user, remember=remember)
-        user_data = user.name + ' ' + user.id
-        return redirect(url_for('my_app.userprofile', user_data=user_data))
+        
+        return redirect(url_for('my_app.userprofile'))
 
 
 @my_auth.route('/signup', methods=['GET', 'POST'])
@@ -39,11 +39,10 @@ def signup():
         name = request.form.get('name')
         password = request.form.get('password')
 
-
     user = User.query.filter_by(email=email).first() 
     if user:
         flash('Email address already exists')
-        return redirect(url_for('my_auth.login'))
+        return redirect(url_for('my_auth.signup'))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), admin=False)
@@ -51,10 +50,11 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
       
-    return redirect(url_for('my_auth.signup'))
+    return redirect(url_for('my_auth.login'))
 
 @my_auth.route('/logout')
 @login_required
 def logout():
+    logout_user()
     return redirect(url_for('my_app.index'))
 

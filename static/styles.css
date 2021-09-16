@@ -80,6 +80,17 @@ button {
     border: 2px solid red;
     background-color: yellowgreen;
     margin: 50px;
-    padding: 0px;
+    padding: 40px;
+    text-align: left;
+}
+
+.floatybox {
+    display: inline-block;
+    font-size: 18px;
+    color: black;
+    border: 2px solid red;
+    background-color: yellowgreen;
+    margin: 50px;
+    padding: 40px;
     text-align: left;
 }
