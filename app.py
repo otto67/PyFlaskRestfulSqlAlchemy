@@ -24,6 +24,16 @@ def is_auth_and_admin(func):
             'errno':1}
     return wrapper
 
+def is_authenticated(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if current_user.is_authenticated:
+            return func(*args, **kwargs)
+        else:
+            flash("Not allowed. You have not been authenticated", "warning")
+            return {'message': 'No access, have not been authenticated',
+            'errno':1}
+    return wrapper
 
 # Main page
 class Index(Resource):
@@ -82,9 +92,9 @@ class AddUser(Resource):
 class EditTasks(Resource):
     
     method_decorators = {
-        'get':[login_required], 
-        'delete':[login_required],
-        'put':[login_required]
+        'get':[is_authenticated], 
+        'delete':[is_authenticated],
+        'put':[is_authenticated]
         }
 
     def get(self):
