@@ -251,7 +251,7 @@ def toggle_user_status(id):
     return jsonify({'message' : msg})
 
 def get_user(id):
-    
+    create_tables()
     user = User.query.filter_by(id=id).first()
     msg = []
 
@@ -266,7 +266,7 @@ def get_user(id):
 
 def get_all_users():  
 
-    all_users = User.query.all()  
+    create_tables()
     msg = []
     if not all_users:
         msg.append(["none"])
