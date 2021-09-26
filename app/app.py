@@ -12,6 +12,8 @@ my_app = Blueprint('my_app', __name__)
 
 api = Api(my_app)
 
+
+
 """ Decorator for routes requiring that the user has admin status."""
 def is_auth_and_admin(func):
     @wraps(func)
@@ -267,6 +269,9 @@ def get_user(id):
 def get_all_users():  
 
     create_tables()
+
+    all_users = User.query.all()
+
     msg = []
     if not all_users:
         msg.append(["none"])
