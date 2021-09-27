@@ -114,7 +114,8 @@ class EditTasks(Resource):
         json_data = request.get_json(force=True)
         id = json_data['id']
         user_id = json_data['user_id']
-        return add_task(id, user_id)
+        description = json_data['desc']
+        return add_task(id, user_id, description)
     
     def delete(self):
         json_data = request.get_json(force=True)
@@ -279,7 +280,7 @@ def get_all_users():
 
     return jsonify(msg)
 
-def add_task(id, user_id):
+def add_task(id, user_id, descr):
     create_tables()
 
     if (int(id) <= 0):
@@ -294,10 +295,9 @@ def add_task(id, user_id):
 # Note! Check if user with user_id exists
 
     # Just randomize the fields of the database for now
-    desc = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
-                                                  for i in range(3))
+    desc = descr # ''.join(secrets.choice(string.ascii_uppercase + string.digits) for i in range(3))
 
-    complete = bool(random.getrandbits(1))
+    complete = False
     
     task = Task(id=id,desc=desc, complete=complete, user_id=int(user_id))
 

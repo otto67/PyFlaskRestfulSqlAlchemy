@@ -11,9 +11,22 @@ function getTaskDataAdd(){
     mymap['id'] = document.getElementById("task_number").value
     let tmp = document.getElementById("task_data").value
     let tmp2 = tmp.split(',');
+
+    if (tmp2.length != 2){
+      document.getElementById('query_response').innerHTML = "Invalid input"
+      mymap['id'] = -1
+      return mymap;
+    }
+
     mymap['desc'] = tmp2[0];
-    mymap['complete'] = tmp2[1];
-    mymap['user_id'] = tmp2[2];
+    var userid = parseInt(tmp2[1]);
+
+    if (isNaN(userid)){
+      document.getElementById('query_response').innerHTML = "Not a valid user id"
+      mymap['id'] = -1
+      return mymap; 
+    }
+    mymap['user_id'] = tmp2[1];
 
     return mymap
 }
