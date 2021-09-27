@@ -3,8 +3,11 @@ function getTaskDataAdd(){
     
     // Error checking later
     var taskid = parseInt(document.getElementById("task_number").value);
-    if (taskid == NaN)
-      return; 
+    if (isNaN(taskid)){
+      document.getElementById('query_response').innerHTML = "Not a valid id"
+      mymap['id'] = -1
+      return mymap; 
+    }
     mymap['id'] = document.getElementById("task_number").value
     let tmp = document.getElementById("task_data").value
     let tmp2 = tmp.split(',');
@@ -17,6 +20,14 @@ function getTaskDataAdd(){
 
 function getTaskID(){
     var mymap = {}  
+
+    var taskid = parseInt(document.getElementById("task_number").value);
+    if (isNaN(taskid)){
+      document.getElementById('query_response').innerHTML = "Not a valid id"
+      mymap['id'] = -1
+      return mymap; 
+    }
+
     mymap['id'] = document.getElementById("task_number").value;
     return mymap;
 }
@@ -95,12 +106,18 @@ function listNonCompletedTasks(){
 }
 
 function CompleteTask(){
+
+  var bdy = getTaskID();
+
+  if (parseInt(bdy['id']) < 0)
+    return;
+
     fetch('/task', {
         method: 'PUT', 
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(getTaskID()) 
+        body: JSON.stringify(bdy) 
       })
       .then(data => data.json())
       .then(data => document.getElementById('query_response').innerHTML = data.message)
@@ -109,12 +126,17 @@ function CompleteTask(){
 
 function addTask(){
     
+    var bdy = getTaskDataAdd();
+
+    if (parseInt(bdy['id']) < 0)
+      return;
+
     fetch('/task', {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(getTaskDataAdd()) 
+        body: JSON.stringify(bdy) 
       })
       .then(data => data.json())
       .then(data => document.getElementById('query_response').innerHTML = data.message)
@@ -122,16 +144,22 @@ function addTask(){
 }
 
 function deleteTask(){
-        fetch('/task', {
-            method: 'DELETE', 
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(getTaskID())  
-          })
-          .then(data => data.json())
-          .then(data => document.getElementById('query_response').innerHTML = data.message)
-          .catch(err => console.log('Task delete ' + err))
+
+  var bdy = getTaskID();
+
+  if (parseInt(bdy['id']) < 0)
+    return;
+
+  fetch('/task', {
+      method: 'DELETE', 
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bdy)  
+      })
+      .then(data => data.json())
+      .then(data => document.getElementById('query_response').innerHTML = data.message)
+      .catch(err => console.log('Task delete ' + err))
 }
 
 
