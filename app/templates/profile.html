@@ -23,15 +23,20 @@
         Home
     </a>
 
-    {% if current_user.admin %}
+    
 
     <br>
+    {% if current_user.admin %}
     <a href="{{ url_for('my_app.editusers') }}" class="navbar-item">
         Administrate users
     </a>
+    {% else %}
+      User administration disabled. Get administrator rights!
+    {% endif %}
     </div>
 
-    {% endif %}
+    
+    
 
     
 </div>
