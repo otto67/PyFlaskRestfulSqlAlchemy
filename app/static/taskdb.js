@@ -2,7 +2,10 @@ function getTaskDataAdd(){
     var mymap = {}  
     
     // Error checking later
-    mymap['id'] = document.getElementById("task_number").value;
+    var taskid = parseInt(document.getElementById("task_number").value);
+    if (taskid == NaN)
+      return; 
+    mymap['id'] = document.getElementById("task_number").value
     let tmp = document.getElementById("task_data").value
     let tmp2 = tmp.split(',');
     mymap['desc'] = tmp2[0];
