@@ -9,6 +9,7 @@ my_auth = Blueprint('my_auth', __name__)
 
 @my_auth.route('/login', methods=['GET', 'POST'])
 def login():
+    print("Hello from login")
     if request.method == 'GET':
         return render_template('login.html')
     else:
